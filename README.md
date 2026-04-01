@@ -6,6 +6,11 @@
 
 ---
 
+Imagine a hospital patient hooked up to monitors. The monitor beeps every time heart rate goes above 100. But maybe that's normal for this patient. Nurses hear 200 beeps a day and start ignoring them. Then a real emergency happens — and nobody responds.
+
+We're building an *AI that learns each patient* and only beeps when it actually matters.
+
+---
 ## What This Is
 
 A fully spec-compliant **OpenEnv environment** for intelligent hospital alarm management. An RL agent learns each patient's personal vital sign baseline and makes context-aware alert decisions — replacing noisy binary threshold alarms with personalized, adaptive intelligence.
