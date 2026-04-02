@@ -1,0 +1,63 @@
+name: mediguard-ai
+description: >
+  AI-powered ICU patient monitoring environment.
+  An RL agent observes normalized vital signs from simulated ICU patients
+  and must decide when to Ignore, Verify, or Alert — learning to suppress
+  false alarms, detect slow deterioration, and triage multiple patients.
+
+version: "1.0.0"
+author: MediGuard-AI Team
+
+env_module: mediguard_env
+env_class: MediGuardEnv
+observation_model: mediguard_env.ObservationModel
+action_model: mediguard_env.ActionModel
+inference_script: inference.py
+
+tasks:
+  - name: suppression
+    description: >
+      Suppress false alarms for a chronically hypertensive patient
+      whose baseline BP is ~150/95. The agent must learn this is
+      normal for this patient and avoid unnecessary alerts.
+    difficulty: easy
+    grader: false_alarm_rate_grader
+    episode_length: 360
+
+  - name: deterioration
+    description: >
+      Detect slow sepsis-like deterioration over 6 simulated hours.
+      Vitals drift gradually — temperature rises, BP drops, SpO2 falls.
+      The agent must catch the trend early and alert appropriately.
+    difficulty: medium
+    grader: deterioration_grader
+    episode_length: 360
+
+  - name: triage
+    description: >
+      Monitor 4 concurrent patients (healthy, post-op, deteriorating,
+      healthy) and prioritize limited attention. The agent must identify
+      which patient genuinely needs care versus who is stable.
+    difficulty: hard
+    grader: triage_grader
+    episode_length: 360
+
+action_space:
+  type: discrete
+  n: 3
+  labels:
+    0: Ignore
+    1: Verify
+    2: Alert
+
+observation_space:
+  heart_rate: { type: float, range: [0.0, 1.0], description: "Normalized HR (30-200 bpm)" }
+  systolic_bp: { type: float, range: [0.0, 1.0], description: "Normalized systolic BP (60-220 mmHg)" }
+  diastolic_bp: { type: float, range: [0.0, 1.0], description: "Normalized diastolic BP (30-140 mmHg)" }
+  spo2: { type: float, range: [0.0, 1.0], description: "Normalized SpO2 (70-100%)" }
+  respiratory_rate: { type: float, range: [0.0, 1.0], description: "Normalized respiratory rate (5-40 bpm)" }
+  temperature: { type: float, range: [0.0, 1.0], description: "Normalized temperature (34-42°C)" }
+  baseline_delta: { type: float, range: [0.0, 1.0], description: "Rolling deviation from personal baseline" }
+  hours_observed: { type: float, description: "Hours elapsed (step / 60)" }
+  activity: { type: int, range: [0, 4], description: "0=resting, 1=eating, 2=ambulating, 3=distressed, 4=falling" }
+  vitals_history: { type: list, shape: [10, 6], description: "Last 10 timesteps of normalized vitals" }
