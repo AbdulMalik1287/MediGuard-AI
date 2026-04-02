@@ -78,5 +78,4 @@ class triage_grader:
         ))
         total = good + bad
         return good / total if total > 0 else 0.5
-    imports → tasks/task2_deterioration.deterioration_grader
-    imports → tasks/task3_triage.triage_grader
+   
