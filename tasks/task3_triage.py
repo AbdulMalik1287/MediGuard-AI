@@ -78,27 +78,5 @@ class triage_grader:
         ))
         total = good + bad
         return good / total if total > 0 else 0.5
-```
-
----
-
-## The Import Chain (Share This With Your Teammates)
-
-This is how all files connect:
-```
-env/mediguard_env.py          ← your teammate's file
-    imports → tasks/reward_function.py     ← YOUR file
-    
-tasks/task1_suppression.py    ← YOUR file
-    imports → tasks/reward_function.py     ← YOUR file
-
-tasks/task2_deterioration.py  ← YOUR file  
-    imports → tasks/reward_function.py     ← YOUR file
-
-tasks/task3_triage.py         ← YOUR file
-    imports → tasks/reward_function.py     ← YOUR file
-
-baseline/run_baseline.py      ← third teammate's file
-    imports → tasks/task1_suppression.false_alarm_rate_grader
     imports → tasks/task2_deterioration.deterioration_grader
     imports → tasks/task3_triage.triage_grader
